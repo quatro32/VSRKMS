@@ -1,0 +1,32 @@
+﻿@page "/AuditMain"
+
+@if (Globals.CurrentAudit == null)
+{
+    <DynamicComponent Type="@typeof(LoadSpinner)" />
+}
+else
+{
+    <h5 class="info-text">Organisatie: @Globals.CurrentAudit.ProjectEssentials.LocationEssentials.OrganizationName</h5>
+    <h5 class="info-text">Locatie: @Globals.CurrentAudit.ProjectEssentials.LocationEssentials.Name</h5>
+    <h5 class="info-text">Project: @Globals.CurrentAudit.ProjectEssentials.Name</h5>
+}
+
+<button class="btn btn-primary" @onclick="StartAudit">Meting starten</button>
+<button class="btn btn-primary" @onclick="CloseAudit">Meting afsluiten</button>
+
+@code {
+    void StartAudit()
+    {
+        NavManager.NavigateTo("/AuditRoomList");
+    }
+
+    void CloseAudit()
+    {
+        NavManager.NavigateTo("/");
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+}

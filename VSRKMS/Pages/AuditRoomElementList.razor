@@ -1,0 +1,75 @@
+﻿@page "/AuditRoomElementList"
+
+@if (roomElements.Any() == false)
+{
+    <DynamicComponent Type="@typeof(LoadSpinner)" />
+}
+else
+{
+    <h5 class="info-text">Ruimte: @currentRoom.Number</h5>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Element</th>
+                <th>Aantal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (RoomElement roomElement in roomElements)
+            {
+                <tr id="@roomElement.ElementId">
+                    <td @onclick="() => OpenRoomElementFault(roomElement)">@roomElement.Name</td>
+                    <td><input type="number" value="@roomElement.Count" min="0" step="1" class="form-control" id="amountInput" style="width:10%" @onchange="args => ChangeCount(args, roomElement)"></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<RoomElement> roomElements = new List<RoomElement>();
+    private Room currentRoom = null;
+    private AuditCategory currentAuditCategory = null;
+
+    private async void OpenRoomElementFault(RoomElement roomElement)
+    {
+        await sessionStorage.SetItemAsync<string>("CurrentRoomGuid", currentRoom.Guid);
+        await sessionStorage.SetItemAsync<string>("CurrentRoomElementGuid", roomElement.Guid);
+        NavManager.NavigateTo("/AuditRoomElementFaultList");
+    }
+
+    private void ChangeCount(ChangeEventArgs args, RoomElement roomElement)
+    {
+        int value = 0;
+        int.TryParse(args.Value.ToString(), out value);
+        roomElement.Count = value;
+    }
+
+    //before page load
+    protected override async Task OnInitializedAsync()
+    {
+        int currentAuditCategoryId = await sessionStorage.GetItemAsync<int>("CurrentAuditCategoryId");
+        string currentRoomGuid = await sessionStorage.GetItemAsync<string>("CurrentRoomGuid");
+
+        currentAuditCategory = Globals.CurrentAudit.AuditCategories.Single(i => i.IDSelf == currentAuditCategoryId);
+        currentRoom = currentAuditCategory.Rooms.Single(i => i.Guid == currentRoomGuid);
+
+        //check if room already has elements
+        if (currentRoom.RoomElements == null || currentRoom.RoomElements.Any() == false)
+        {
+            currentRoom.RoomElements = new List<RoomElement>();
+            //add elements from corresponding category from auditresults to room (used due to bad coding in backend)
+            foreach(AuditResult ar in currentAuditCategory.AuditResults)
+            {
+                currentRoom.RoomElements.Add(new RoomElement()
+                {
+                    Guid = Guid.NewGuid().ToString(),
+                    ElementId = ar.IDElement,
+                    Name = ar.ElementName
+                });
+            }
+        }
+
+        roomElements = currentRoom.RoomElements;
+    }
+}

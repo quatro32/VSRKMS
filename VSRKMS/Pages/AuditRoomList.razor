@@ -1,0 +1,42 @@
+﻿@page "/AuditRoomList"
+
+@if (Globals.CurrentAudit == null)
+{
+    <DynamicComponent Type="@typeof(LoadSpinner)" />
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Ruimtenummer</th>
+                <th>Functie</th>
+                <th>Categorie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AuditCategory auditCategory in Globals.CurrentAudit.AuditCategories)
+            {
+                foreach (Room room in auditCategory.Rooms)
+                {
+                    <tr id="@room.Guid" @onclick="() => OpenRoom(room, auditCategory)">
+                        <td>@room.Number</td>
+                        <td>@room.RoomFunction</td>
+                        <td>@auditCategory.CategoryName</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    async void OpenRoom(Room room, AuditCategory auditCategory) 
+    {
+        //set current selected objects
+        await sessionStorage.SetItemAsync<string>("CurrentRoomGuid", room.Guid);
+        await sessionStorage.SetItemAsync<int>("CurrentAuditCategoryId", auditCategory.IDSelf);
+        //navigate to next page
+        NavManager.NavigateTo("/AuditRoomElementList");
+    }
+}

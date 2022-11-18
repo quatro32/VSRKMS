@@ -1,0 +1,72 @@
+﻿@page "/"
+
+<PageTitle>VSR-KMS Index</PageTitle>
+
+<h1>VSR-KMS</h1>
+
+@if (auditPreviews.Any() == false)
+{
+    <DynamicComponent Type="@typeof(LoadSpinner)" />
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Organisatie</th>
+                <th>Project</th>
+                <th>Locatie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AuditPreview ap in auditPreviews)
+            {
+                <tr id="@ap.Id" @onclick="() => OpenAudit(ap.Id)">
+                    <td>@ap.Organization</td>
+                    <td>@ap.Project</td>
+                    <td>@ap.Location</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @*<button class="btn btn-primary" @onclick="DEBUG">Get Data</button>*@
+}
+
+@code {
+    List<AuditPreview> auditPreviews = new List<AuditPreview>();
+
+    async void DEBUG()
+    {
+        var Audit = System.Text.Json.JsonSerializer.Deserialize<Audit>(TestData.VSR_AUDIT_1);
+        var AuditPreview = System.Text.Json.JsonSerializer.Deserialize<AuditPreview>(TestData.VSR_AUDITPREVIEW_1);
+    }
+
+    async Task GetAudits()
+    {
+        //auditPreviews.Add(System.Text.Json.JsonSerializer.Deserialize<AuditPreview>(TestData.VSR_AUDITPREVIEW_1));
+        auditPreviews = TestData.GetAudits();
+    }
+
+    private async Task OpenAudit(int id)
+    {
+        using (var db = await this.DbFactory.Create<Database>())
+        {
+            //check if selected audit already exists in indexeddb
+            Globals.CurrentAudit = db.Audits.SingleOrDefault(i => i.Id == id);
+            if (Globals.CurrentAudit == null)
+            {
+                Globals.CurrentAudit = TestData.GetAudit(id);
+                //add downloaded audit to indexedDb and save
+                db.Audits.Add(Globals.CurrentAudit);
+                await db.SaveChanges();
+            }
+        }
+        NavManager.NavigateTo("/AuditMain");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAudits();
+    }
+ }

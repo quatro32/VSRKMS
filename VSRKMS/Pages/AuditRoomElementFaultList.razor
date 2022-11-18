@@ -1,0 +1,78 @@
+﻿@page "/AuditRoomElementFaultList"
+
+@if (currentRoom == null || currentAuditCategory == null || currentRoomElement == null)
+{
+    <DynamicComponent Type="@typeof(LoadSpinner)" />
+}
+else
+{
+    <h5>Ruimte: @currentRoom.Number</h5>
+    <h5>Element: @currentRoomElement.Name (Aantal: @currentRoomElement.Count)</h5>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Foutsoort</th>
+                <th>Aantal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (FaultType faultType in Globals.CurrentAudit.FaultTypes)
+            {
+                Fault fault = currentRoomElement.Faults == null ? null : currentRoomElement.Faults.SingleOrDefault(i => i.FaultType.Id == faultType.Id);
+                int count = fault == null ? 0 : fault.Count;
+
+                <tr id="@faultType.Id">
+                    <td>@faultType.Name</td>
+                    <td><input type="number" value="@count" min="0" step="1" class="form-control" id="amountInput" style="width:10%" @onchange="args => ChangeCount(args, faultType)"></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Fault> roomElementFaults = new List<Fault>();
+    private RoomElement currentRoomElement = null;
+    private Room currentRoom = null;
+    private AuditCategory currentAuditCategory = null;
+    private bool canLoadList = false;
+
+    //before page load
+    protected override async Task OnInitializedAsync()
+    {
+        int currentAuditCategoryId = await sessionStorage.GetItemAsync<int>("CurrentAuditCategoryId");
+        string currentRoomGuid = await sessionStorage.GetItemAsync<string>("CurrentRoomGuid");
+        string currentRoomElementGuid = await sessionStorage.GetItemAsync<string>("CurrentRoomElementGuid");
+
+        currentAuditCategory = Globals.CurrentAudit.AuditCategories.Single(i => i.IDSelf == currentAuditCategoryId);
+        currentRoom = currentAuditCategory.Rooms.Single(i => i.Guid == currentRoomGuid);
+        currentRoomElement = currentRoom.RoomElements.Single(i => i.Guid == currentRoomElementGuid);
+    }
+
+    private void ChangeCount(ChangeEventArgs args, FaultType faultType)
+    {
+        //try to get the value of the spinbox, otherwise default 0
+        int value = 0;
+        int.TryParse(args.Value.ToString(), out value);
+
+        //check if roomelement already has faults, otherwise create new list
+        if(currentRoomElement.Faults == null)
+        {
+            currentRoomElement.Faults = new List<Fault>();
+        }
+
+        //check if roomelement already has current changed fault, otherwise create
+        Fault fault = currentRoomElement.Faults.SingleOrDefault(i => i.FaultType.Id == faultType.Id);
+        if (fault == null)
+        {
+            fault = new Fault()
+            {
+                FaultType = faultType,
+                Guid = Guid.NewGuid().ToString()
+            };
+            currentRoomElement.Faults.Add(fault);
+        }
+        //now it's sure fault isn't null, set count
+        fault.Count = value;
+    }
+}
