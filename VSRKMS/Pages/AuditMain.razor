@@ -15,13 +15,14 @@ else
 <button class="btn btn-primary" @onclick="CloseAudit">Meting afsluiten</button>
 
 @code {
-    void StartAudit()
+    private void StartAudit()
     {
         NavManager.NavigateTo("/AuditRoomList");
     }
 
-    void CloseAudit()
+    private async void CloseAudit()
     {
+        await Globals.CurrentAudit.SaveAsync(this.DbFactory);
         NavManager.NavigateTo("/");
     }
 
