@@ -134,7 +134,7 @@ namespace VSRKMS.Models
             using (var db = await dbFactory.Create<Database>())
             {
                 Audit dbAudit = db.Audits.Single(i => i.Id == Id);
-                dbAudit = this;
+                dbAudit.AuditCategories = this.AuditCategories;
                 await db.SaveChanges();
             }
         }
