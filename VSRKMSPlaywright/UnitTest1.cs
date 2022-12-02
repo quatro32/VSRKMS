@@ -45,8 +45,7 @@ public class Tests : PageTest
 
         await Page.GetByRole(AriaRole.Row, new() { NameString = "0.11 Kantoor accounting internationaal Bureau" }).GetByRole(AriaRole.Cell, new() { NameString = "Kantoor accounting internationaal" }).ClickAsync();
 
-        var selectors = await Page.GetByRole(AriaRole.Row, null).Locator("#amountInput").CountAsync();
-        var qq = "";
+        var allCounterValues = await Page.Locator(".hiddenElementCount").AllInnerTextsAsync(); 
     }
 
     [Test]
