@@ -1,0 +1,43 @@
+﻿<table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Organisatie</th>
+                <th>Project</th>
+                <th>Locatie</th>
+                <th>Lokaal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AuditPreview auditPreview in AuditPreviews)
+            {
+                <tr id="@auditPreview.Id" @onclick="() => OpenAudit(auditPreview)">
+                    <td class="organization-dimension">@auditPreview.Organization</td>
+                    <td class="project-dimension">@auditPreview.Project</td>
+                    <td class="location-dimension">@auditPreview.Location</td>
+                    <td class="islocal-dimension">@auditPreview.IsLocallyStoredText</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+@code {
+    [Parameter]
+    public List<AuditPreview> AuditPreviews { get; set; }
+
+    private async Task OpenAudit(AuditPreview auditPreview)
+    {
+        using (var db = await this.DbFactory.Create<Database>())
+        {
+            //check if selected audit already exists in indexeddb
+            Globals.CurrentAudit = db.Audits.SingleOrDefault(i => i.Id == auditPreview.Id);
+            if (Globals.CurrentAudit == null)
+            {
+                Globals.CurrentAudit = TestData.GetAudit(auditPreview.Id);
+                //add downloaded audit to indexedDb and save
+                db.Audits.Add(Globals.CurrentAudit);
+                await db.SaveChanges();
+            }
+        }
+        NavManager.NavigateTo("/AuditMain");
+    }
+}

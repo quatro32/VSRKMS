@@ -10,5 +10,10 @@
         public string Organization { get; set; }
         public string Project { get; set; }
         public string UpdatedOn { get; set; }
+        public bool IsLocallyStored { get; set; }
+        public string IsLocallyStoredText
+        {
+            get { return IsLocallyStored ? "✓" : "╳"; }
+        }
     }
 }
