@@ -6,28 +6,35 @@
 }
 else
 {
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Ruimtenummer</th>
-                <th>Functie</th>
-                <th>Categorie</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (AuditCategory auditCategory in Globals.CurrentAudit.AuditCategories)
-            {
-                foreach (Room room in auditCategory.Rooms)
+    if (Globals.CurrentAudit.AuditCategories.SelectMany(i => i.Rooms).Any() == false)
+    {
+        <h5>Er zijn gen ruimtes gevonden.</h5>
+    }
+    else
+    {
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Ruimtenummer</th>
+                    <th>Functie</th>
+                    <th>Categorie</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (AuditCategory auditCategory in Globals.CurrentAudit.AuditCategories)
                 {
-                    <tr id="@room.Guid" @onclick="() => OpenRoom(room, auditCategory)">
-                        <td>@room.Number</td>
-                        <td>@room.RoomFunction</td>
-                        <td>@auditCategory.CategoryName</td>
-                    </tr>
+                    foreach (Room room in auditCategory.Rooms)
+                    {
+                        <tr id="@room.Guid" @onclick="() => OpenRoom(room, auditCategory)">
+                            <td>@room.Number</td>
+                            <td>@room.RoomFunction</td>
+                            <td>@auditCategory.CategoryName</td>
+                        </tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    }
 }
 
 @code {

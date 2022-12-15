@@ -6,8 +6,9 @@
 }
 else
 {
-    <h5>Ruimte: @currentRoom.Number</h5>
-    <h5>Element: @currentRoomElement.Name (Aantal: @currentRoomElement.Count)</h5>
+    <h5 class="info-text">Ruimte: @currentRoom.Number</h5>
+    <h5 class="info-text">Element: @currentRoomElement.Name</h5>
+    <h5 class="info-text">Totaal aantal fouten: @currentRoomElementFaultAmount</h5>
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -36,6 +37,11 @@ else
     private Room currentRoom = null;
     private AuditCategory currentAuditCategory = null;
     private bool canLoadList = false;
+
+    private int currentRoomElementFaultAmount
+    {
+        get { return currentRoomElement.Faults == null ? 0 : currentRoomElement.Faults.Sum(i => i.Count); }
+    }
 
     //before page load
     protected override async Task OnInitializedAsync()
