@@ -2,18 +2,6 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "Blazored.SessionStorage/2.2.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNetCore.Components.Web": "5.0.5"
-        },
-        "compile": {
-          "lib/net5.0/Blazored.SessionStorage.dll": {}
-        },
-        "runtime": {
-          "lib/net5.0/Blazored.SessionStorage.dll": {}
-        }
-      },
       "IndexedDB.Blazor/1.1.1": {
         "type": "package",
         "dependencies": {
@@ -545,18 +533,6 @@
       }
     },
     "net6.0/browser-wasm": {
-      "Blazored.SessionStorage/2.2.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNetCore.Components.Web": "5.0.5"
-        },
-        "compile": {
-          "lib/net5.0/Blazored.SessionStorage.dll": {}
-        },
-        "runtime": {
-          "lib/net5.0/Blazored.SessionStorage.dll": {}
-        }
-      },
       "IndexedDB.Blazor/1.1.1": {
         "type": "package",
         "dependencies": {
@@ -1083,20 +1059,6 @@
     }
   },
   "libraries": {
-    "Blazored.SessionStorage/2.2.0": {
-      "sha512": "2iVrDbv30kuufV0CGjNkQgVReH/aSfDlyqnYTXyoFIFwtrSnMS+pqx5tLFAoigLXn/imSQHPZkVnOArLZYefXg==",
-      "type": "package",
-      "path": "blazored.sessionstorage/2.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "blazored.sessionstorage.2.2.0.nupkg.sha512",
-        "blazored.sessionstorage.nuspec",
-        "icon.png",
-        "lib/net5.0/Blazored.SessionStorage.dll",
-        "lib/netstandard2.1/Blazored.SessionStorage.dll"
-      ]
-    },
     "IndexedDB.Blazor/1.1.1": {
       "sha512": "4suc8vcgmAFJgjXJAzCHo5hW7Xz36hX21Plo5Ta06Q6wgbBSa32l+RMeiBJpNnw+HVdPkvsvnrL1oIWz4FgatQ==",
       "type": "package",
@@ -1888,7 +1850,6 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Blazored.SessionStorage >= 2.2.0",
       "IndexedDB.Blazor >= 1.1.1",
       "Microsoft.AspNetCore.Components.WebAssembly >= 6.0.10",
       "Microsoft.AspNetCore.Components.WebAssembly.DevServer >= 6.0.10"
@@ -1933,10 +1894,6 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
-          "Blazored.SessionStorage": {
-            "target": "Package",
-            "version": "[2.2.0, )"
-          },
           "IndexedDB.Blazor": {
             "target": "Package",
             "version": "[1.1.1, )"

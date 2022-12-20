@@ -41,8 +41,8 @@ else
     async void OpenRoom(Room room, AuditCategory auditCategory) 
     {
         //set current selected objects
-        await sessionStorage.SetItemAsync<string>("CurrentRoomGuid", room.Guid);
-        await sessionStorage.SetItemAsync<int>("CurrentAuditCategoryId", auditCategory.IDSelf);
+        Current.Instance.Room = room;
+        Current.Instance.AuditCategory = auditCategory;
         //navigate to next page
         NavManager.NavigateTo("/AuditRoomElementList");
     }

@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "yAXEj8QkhvLhMEKl9v8m84FY+H4BUfwZVg+lRsVsQFnc4LM5Qtil+WAZekzXmjBoB09bDIdrXDLHg9EUAtS0pQ==",
+  "dgSpecHash": "SEBZa0wsPgwsBZHwQlSYY3PEUhLnsV1TLjw4ypIsbXPQ0xQ3IWErz10yIbTIW6V0DlUSmZJF/xJ/AGAm1dBwzQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\shnva\\Documents\\School\\VSRKMS\\VSRKMS\\VSRKMS.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\shnva\\.nuget\\packages\\blazored.sessionstorage\\2.2.0\\blazored.sessionstorage.2.2.0.nupkg.sha512",
     "C:\\Users\\shnva\\.nuget\\packages\\indexeddb.blazor\\1.1.1\\indexeddb.blazor.1.1.1.nupkg.sha512",
     "C:\\Users\\shnva\\.nuget\\packages\\microsoft.aspnetcore.authorization\\6.0.10\\microsoft.aspnetcore.authorization.6.0.10.nupkg.sha512",
     "C:\\Users\\shnva\\.nuget\\packages\\microsoft.aspnetcore.components\\6.0.10\\microsoft.aspnetcore.components.6.0.10.nupkg.sha512",

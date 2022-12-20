@@ -1,13 +1,13 @@
 ﻿@page "/AuditRoomElementFaultList"
 
-@if (currentRoom == null || currentAuditCategory == null || currentRoomElement == null)
+@if (Current.Instance.AuditCategory == null || Current.Instance.Room == null || Current.Instance.RoomElement == null)
 {
     <DynamicComponent Type="@typeof(LoadSpinner)" />
 }
 else
 {
-    <h5 class="info-text">Ruimte: @currentRoom.Number</h5>
-    <h5 class="info-text">Element: @currentRoomElement.Name</h5>
+    <h5 class="info-text">Ruimte: @Current.Instance.Room.Number</h5>
+    <h5 class="info-text">Element: @Current.Instance.RoomElement.Name</h5>
     <h5 class="info-text">Totaal aantal fouten: @currentRoomElementFaultAmount</h5>
     <table class="table table-striped table-bordered">
         <thead>
@@ -19,7 +19,7 @@ else
         <tbody>
             @foreach (FaultType faultType in Globals.CurrentAudit.FaultTypes)
             {
-                Fault fault = currentRoomElement.Faults == null ? null : currentRoomElement.Faults.SingleOrDefault(i => i.FaultType.Id == faultType.Id);
+                Fault fault = Current.Instance.RoomElement.Faults == null ? null : Current.Instance.RoomElement.Faults.SingleOrDefault(i => i.FaultType.Id == faultType.Id);
                 int count = fault == null ? 0 : fault.Count;
 
                 <tr id="@faultType.Id">
@@ -33,27 +33,12 @@ else
 
 @code {
     private List<Fault> roomElementFaults = new List<Fault>();
-    private RoomElement currentRoomElement = null;
-    private Room currentRoom = null;
-    private AuditCategory currentAuditCategory = null;
-    private bool canLoadList = false;
 
     private int currentRoomElementFaultAmount
     {
-        get { return currentRoomElement.Faults == null ? 0 : currentRoomElement.Faults.Sum(i => i.Count); }
+        get { return Current.Instance.RoomElement.Faults == null ? 0 : Current.Instance.RoomElement.Faults.Sum(i => i.Count); }
     }
 
-    //before page load
-    protected override async Task OnInitializedAsync()
-    {
-        int currentAuditCategoryId = await sessionStorage.GetItemAsync<int>("CurrentAuditCategoryId");
-        string currentRoomGuid = await sessionStorage.GetItemAsync<string>("CurrentRoomGuid");
-        string currentRoomElementGuid = await sessionStorage.GetItemAsync<string>("CurrentRoomElementGuid");
-
-        currentAuditCategory = Globals.CurrentAudit.AuditCategories.Single(i => i.IDSelf == currentAuditCategoryId);
-        currentRoom = currentAuditCategory.Rooms.Single(i => i.Guid == currentRoomGuid);
-        currentRoomElement = currentRoom.RoomElements.Single(i => i.Guid == currentRoomElementGuid);
-    }
 
     private void ChangeCount(ChangeEventArgs args, FaultType faultType)
     {
@@ -62,13 +47,13 @@ else
         int.TryParse(args.Value.ToString(), out value);
 
         //check if roomelement already has faults, otherwise create new list
-        if(currentRoomElement.Faults == null)
+        if (Current.Instance.RoomElement.Faults == null)
         {
-            currentRoomElement.Faults = new List<Fault>();
+            Current.Instance.RoomElement.Faults = new List<Fault>();
         }
 
         //check if roomelement already has current changed fault, otherwise create
-        Fault fault = currentRoomElement.Faults.SingleOrDefault(i => i.FaultType.Id == faultType.Id);
+        Fault fault = Current.Instance.RoomElement.Faults.SingleOrDefault(i => i.FaultType.Id == faultType.Id);
         if (fault == null)
         {
             fault = new Fault()
@@ -76,7 +61,7 @@ else
                 FaultType = faultType,
                 Guid = Guid.NewGuid().ToString()
             };
-            currentRoomElement.Faults.Add(fault);
+            Current.Instance.RoomElement.Faults.Add(fault);
         }
         //now it's sure fault isn't null, set count
         fault.Count = value;
