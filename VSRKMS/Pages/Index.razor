@@ -29,13 +29,14 @@ else
 }
 
 @code {
-    private bool IsOnline = false;
+    private bool isOnline = false;
     private bool seacrhedForAudits = false;
     private List<AuditPreview> auditPreviews = new List<AuditPreview>();
 
     private List<AuditPreview> GetAudits(bool isOnline)
     {
-        if(isOnline==false){
+        if (isOnline == false)
+        {
             return auditPreviews.Where(i => i.IsLocallyStored == true).ToList();
         }
         return auditPreviews;
