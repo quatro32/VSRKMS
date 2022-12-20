@@ -1,14 +1,14 @@
 ﻿@page "/AuditMain"
 
-@if (Globals.CurrentAudit == null)
+@if (Current.Instance.Audit == null)
 {
     <DynamicComponent Type="@typeof(LoadSpinner)" />
 }
 else
 {
-    <h5 class="info-text">Organisatie: @Globals.CurrentAudit.ProjectEssentials.LocationEssentials.OrganizationName</h5>
-    <h5 class="info-text">Locatie: @Globals.CurrentAudit.ProjectEssentials.LocationEssentials.Name</h5>
-    <h5 class="info-text">Project: <p>@Globals.CurrentAudit.ProjectEssentials.Name</p></h5>
+    <h5 class="info-text">Organisatie: @Current.Instance.Audit.ProjectEssentials.LocationEssentials.OrganizationName</h5>
+    <h5 class="info-text">Locatie: @Current.Instance.Audit.ProjectEssentials.LocationEssentials.Name</h5>
+    <h5 class="info-text">Project: <p>@Current.Instance.Audit.ProjectEssentials.Name</p></h5>
 }
 
 <button class="btn btn-primary" @onclick="StartAudit">Meting starten</button>
@@ -22,7 +22,7 @@ else
 
     private async void CloseAudit()
     {
-        await Globals.CurrentAudit.SaveAsync(this.DbFactory);
+        await Current.Instance.Audit.SaveAsync(this.DbFactory);
         NavManager.NavigateTo("/");
     }
 }

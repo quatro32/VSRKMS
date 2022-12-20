@@ -1,12 +1,12 @@
 ﻿@page "/AuditRoomList"
 
-@if (Globals.CurrentAudit == null)
+@if (Current.Instance.Audit == null)
 {
     <DynamicComponent Type="@typeof(LoadSpinner)" />
 }
 else
 {
-    if (Globals.CurrentAudit.AuditCategories.SelectMany(i => i.Rooms).Any() == false)
+    if (Current.Instance.Audit.AuditCategories.SelectMany(i => i.Rooms).Any() == false)
     {
         <h5>Er zijn gen ruimtes gevonden.</h5>
     }
@@ -21,7 +21,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (AuditCategory auditCategory in Globals.CurrentAudit.AuditCategories)
+                @foreach (AuditCategory auditCategory in Current.Instance.Audit.AuditCategories)
                 {
                     foreach (Room room in auditCategory.Rooms)
                     {

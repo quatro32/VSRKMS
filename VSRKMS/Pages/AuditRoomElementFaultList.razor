@@ -17,7 +17,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (FaultType faultType in Globals.CurrentAudit.FaultTypes)
+            @foreach (FaultType faultType in Current.Instance.Audit.FaultTypes)
             {
                 Fault fault = Current.Instance.RoomElement.Faults == null ? null : Current.Instance.RoomElement.Faults.SingleOrDefault(i => i.FaultType.Id == faultType.Id);
                 int count = fault == null ? 0 : fault.Count;
