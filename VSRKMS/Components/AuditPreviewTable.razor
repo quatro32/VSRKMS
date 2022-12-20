@@ -29,12 +29,12 @@
         using (var db = await this.DbFactory.Create<Database>())
         {
             //check if selected audit already exists in indexeddb
-            Globals.CurrentAudit = db.Audits.SingleOrDefault(i => i.Id == auditPreview.Id);
-            if (Globals.CurrentAudit == null)
+            Current.Instance.Audit = db.Audits.SingleOrDefault(i => i.Id == auditPreview.Id);
+            if (Current.Instance.Audit == null)
             {
-                Globals.CurrentAudit = TestData.GetAudit(auditPreview.Id);
+                Current.Instance.Audit = TestData.GetAudit(auditPreview.Id);
                 //add downloaded audit to indexedDb and save
-                db.Audits.Add(Globals.CurrentAudit);
+                db.Audits.Add(Current.Instance.Audit);
                 await db.SaveChanges();
             }
         }
