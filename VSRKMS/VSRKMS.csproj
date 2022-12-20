@@ -10,7 +10,6 @@
   <ItemGroup>
     <Content Remove="Shared\NavMenu.razor" />
     <Content Remove="Shared\SurveyPrompt.razor" />
-    <Content Remove="wwwroot\Scripts\Connection.js" />
 	<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 
@@ -22,10 +21,6 @@
     <PackageReference Include="IndexedDB.Blazor" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.10" PrivateAssets="all" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\Scripts\" />
   </ItemGroup>
 
 </Project>
