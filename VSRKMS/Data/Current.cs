@@ -13,8 +13,9 @@ namespace VSRKMS.Data
             get
             {
                 if (_instance == null)
+                {
                     _instance = new Current();
-
+                }
                 return _instance;
             }
         }
